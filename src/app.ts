@@ -1,18 +1,22 @@
 import express, { Application, json } from "express";
-import { Client, ClientConfig } from "pg";
 import { startDatabase } from "./database";
-import { insertMovie, insertMovieFormat, listMovies } from "./logic";
-// import { ClientConfig } from "./interfaces";
+import { deleteMovie, findMovie, insertMovie, listMovies } from "./logic";
+import { ensureIdExistsMiddleware, getIdMiddleware } from "./middlewares";
 
 const app: Application = express();
 app.use(express.json());
 
-app.post("/movies", insertMovie);
-app.post("/movies", insertMovieFormat);
-app.get("/movies", listMovies);
+const defaultRoute = "/movies";
+const routeWithId = defaultRoute + "/:id";
 
-const PORT: number = 1234;
-const runningMsg: string = `Server running on http://localhost:${PORT}`;
+app.post(defaultRoute, insertMovie);
+app.get(defaultRoute, listMovies);
+app.get(routeWithId, getIdMiddleware, ensureIdExistsMiddleware, findMovie);
+app.delete(routeWithId, getIdMiddleware, ensureIdExistsMiddleware, deleteMovie);
+
+export const PORT: number = 1234;
+export const url: string = `http://localhost:${PORT}`;
+const runningMsg: string = `Server running on ${url}`;
 app.listen(PORT, async () => {
     await startDatabase();
     console.log(runningMsg);
