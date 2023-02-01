@@ -73,7 +73,7 @@ export async function findMovie(request: Request, response: Response): Promise<R
 
     const queryResult: iMovieResult = await client.query(queryConfig);
     const movieFound: iMovie = queryResult.rows[0]
-    if (!movieFound) {
+    if(!movieFound) {
         return errorNotFound(response);
     }
 

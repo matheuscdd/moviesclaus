@@ -1,7 +1,7 @@
 import express, { Application, json } from "express";
 import { startDatabase } from "./database";
 import { deleteMovie, findMovie, insertMovie, listMovies } from "./logic";
-import { ensureIdExistsMiddleware, getIdMiddleware } from "./middlewares";
+import { ensureIdExistsMiddleware, getIdMiddleware, verifyDataMiddleware } from "./middlewares";
 
 const app: Application = express();
 app.use(express.json());
@@ -9,7 +9,7 @@ app.use(express.json());
 const defaultRoute = "/movies";
 const routeWithId = defaultRoute + "/:id";
 
-app.post(defaultRoute, insertMovie);
+app.post(defaultRoute, verifyDataMiddleware, insertMovie);
 app.get(defaultRoute, listMovies);
 app.get(routeWithId, getIdMiddleware, ensureIdExistsMiddleware, findMovie);
 app.delete(routeWithId, getIdMiddleware, ensureIdExistsMiddleware, deleteMovie);
