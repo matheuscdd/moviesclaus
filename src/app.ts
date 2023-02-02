@@ -6,7 +6,7 @@ import { ensureIdExistsMiddleware, ensureNameIsOnlyMiddleware, getIdMiddleware, 
 const app: Application = express();
 app.use(json());
 
-const defaultRoute = "/movies";
+export const defaultRoute = "/movies";
 const routeWithId = defaultRoute + "/:id";
 
 app.post(defaultRoute, verifyDataMiddleware, ensureNameIsOnlyMiddleware, insertMovie);
@@ -15,7 +15,7 @@ app.get(routeWithId, getIdMiddleware, ensureIdExistsMiddleware, findMovie);
 app.delete(routeWithId, getIdMiddleware, ensureIdExistsMiddleware, deleteMovie);
 app.put(routeWithId, getIdMiddleware, ensureIdExistsMiddleware, verifyDataMiddleware, ensureNameIsOnlyMiddleware, updateIntMovie);
 
-export const PORT: number = 1234;
+const PORT: number = 1234;
 export const url: string = `http://localhost:${PORT}`;
 const runningMsg: string = `Server running on ${url}`;
 app.listen(PORT, async () => {

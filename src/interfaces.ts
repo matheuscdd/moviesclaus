@@ -11,6 +11,12 @@ export interface iMovie extends iMovieRequest {
     id: number;
 }
 
+interface iCount {
+    count: string;
+}
+
+export type iCountResult = QueryResult<iCount>;
+
 export type iMovieResult = QueryResult<iMovie>;
 
 export interface iMovieListPage {
