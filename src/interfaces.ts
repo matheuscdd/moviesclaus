@@ -22,6 +22,8 @@ export interface iMovieListPage {
 
 export type iMovieKeys = "name" | "description" | "duration" | "price";
 
+export type iOrder = "price" | "duration";
+
 export interface iCanRun {
     error: boolean,
     msg: string

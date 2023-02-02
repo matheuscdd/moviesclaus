@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import { Query, QueryConfig } from "pg";
+import { QueryConfig } from "pg";
 import format from "pg-format";
 import { client } from "./database";
 import { errorNotFound } from "./errors";
-import { iMovie, iMovieListPage, iMovieRequest, iMovieResult } from "./interfaces";
-import { validateIntMovie } from "./validate";
+import { iMovie, iMovieListPage, iMovieRequest, iMovieResult, iOrder } from "./interfaces";
 
 export async function listMovies(request: Request, response: Response): Promise<Response> {
     let perPage: number = Number(request.query.perPage);
@@ -12,19 +11,50 @@ export async function listMovies(request: Request, response: Response): Promise<
     let page: number = Number(request.query.page);
     page = isNaN(page) || page <= 0 ? 0 : page - 1; 
     page *= perPage;
-    //Falta  adicionar o sort e o order
 
+    let sort: iOrder | string = String(request.query.sort!) === 'price' || String(request.query.sort!) === 'duration' ? String(request.query.sort!) : 'id';
+    let order: iOrder | string = String(request.query.order!) === 'asc' || String(request.query.order!) === 'desc' ? String(request.query.order!) : 'asc';
+
+    if (sort === 'id') {
+        order = 'asc';
+    }
     const queryString: string = `--sql
         SELECT
             *
         FROM
             movies
+        ORDER BY 
+            %I ${order === 'asc' ? 'ASC' : 'DESC'}
         LIMIT $1 OFFSET $2;
         `;
 
+    // let queryString: string;   
+    // if (order === 'asc') {
+    //     queryString = `--sql
+    //     SELECT
+    //         *
+    //     FROM
+    //         movies
+    //     ORDER BY 
+    //         %I ASC
+    //     LIMIT $1 OFFSET $2;
+    //     `;
+    // } else {
+    //     queryString = `--sql
+    //     SELECT
+    //         *
+    //     FROM
+    //         movies
+    //     ORDER BY 
+    //         %I DESC
+    //     LIMIT $1 OFFSET $2;
+    //     `;
+    // }
+    
+    const queryFormat: string = format(queryString, sort);
     const queryConfig: QueryConfig = {
-        text: queryString,
-        values: Object.values([perPage, page])
+        text: queryFormat,
+        values: [perPage, page]
     }; 
 
     const queryResult: iMovieResult = await client.query(queryConfig);
@@ -39,7 +69,7 @@ export async function listMovies(request: Request, response: Response): Promise<
 }
 
 export async function insertMovie(request: Request, response: Response): Promise<Response> {
-    const movieDataRequest: iMovieRequest = request.movieOption.data!;
+    const movieDataRequest: iMovieRequest = request.data!;
 
     const queryString: string = format(`--sql
         INSERT INTO
@@ -49,7 +79,7 @@ export async function insertMovie(request: Request, response: Response): Promise
         RETURNING *;
         `, Object.keys(movieDataRequest), Object.values(movieDataRequest)
         );
-
+    console.log(queryString)
     const queryResult: iMovieResult = await client.query(queryString);
     const movieCreated: iMovie = queryResult.rows[0];
 
@@ -57,7 +87,7 @@ export async function insertMovie(request: Request, response: Response): Promise
 }
 
 export async function findMovie(request: Request, response: Response): Promise<Response> {
-    const id: number = request.movieOption.id!;
+    const id: number = request.id!;
 
     const queryString: string = `--sql
         SELECT
@@ -83,7 +113,7 @@ export async function findMovie(request: Request, response: Response): Promise<R
 }
 
 export async function deleteMovie(request: Request, response: Response): Promise<Response> {
-    const id: number = request.movieOption.id!;
+    const id: number = request.id!;
 
     const queryString: string = `--sql
             DELETE FROM
@@ -104,11 +134,9 @@ export async function deleteMovie(request: Request, response: Response): Promise
 } 
 
 export async function updateIntMovie(request: Request, response: Response): Promise<Response> {
-    const id: number = request.movieOption.id!;
-    const movieRequestValues = Object.values(request.movieOption.data!);
-    const movieHasDescription = await validateIntMovie(request);
-    let queryConfig: QueryConfig;
-    
+    const id: number = request.id!;
+    const movieRequest: iMovieRequest = request.data!;
+        
     const queryString = `--sql
         UPDATE
             movies
@@ -122,18 +150,11 @@ export async function updateIntMovie(request: Request, response: Response): Prom
         RETURNING *;    
     `;
     
-    if(movieHasDescription) {
-        queryConfig = {
+    const queryConfig: QueryConfig = {
             text: queryString,
-            values: [...movieRequestValues, id]
+            values: [movieRequest.name, movieRequest.duration, movieRequest.price, (movieRequest.description ? movieRequest.description : null), id]
         }
-    } else {
-        const valuesWithoutDescription = movieRequestValues.slice(0,3)
-        queryConfig = {
-            text: queryString,
-            values: [...valuesWithoutDescription, null, id]
-        }
-    }
+    
     
     const queryResult: iMovieResult = await client.query(queryConfig);
     const movieFound: iMovie = queryResult.rows[0];

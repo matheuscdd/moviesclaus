@@ -4,10 +4,8 @@ import { iMovieRequest } from "../../interfaces";
 declare global {
     namespace Express {
         interface Request {
-            movieOption: {
-                id?: number;
-                data?: iMovieRequest;
-            }
+            id?: number;
+            data?: iMovieRequest;
         }
     }
 }

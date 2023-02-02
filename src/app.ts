@@ -4,7 +4,7 @@ import { deleteMovie, findMovie, insertMovie, listMovies, updateIntMovie } from 
 import { ensureIdExistsMiddleware, ensureNameIsOnlyMiddleware, getIdMiddleware, verifyDataMiddleware } from "./middlewares";
 
 const app: Application = express();
-app.use(express.json());
+app.use(json());
 
 const defaultRoute = "/movies";
 const routeWithId = defaultRoute + "/:id";

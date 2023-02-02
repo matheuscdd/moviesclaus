@@ -11,15 +11,13 @@ export async function getIdMiddleware(request: Request, response: Response, next
         return errorNotFound(response);
     }
 
-    request.movieOption = {
-        id: id
-    }
+    request.id = id;
 
     return next();
 }
 
 export async function ensureIdExistsMiddleware(request: Request, response: Response, next: NextFunction): Promise<Response | void> {
-    const id = request.movieOption.id;
+    const id = request.id;
     
     const queryString: string = `--sql
         SELECT
@@ -68,20 +66,14 @@ export async function verifyDataMiddleware(request: Request, response: Response,
         });
     }
 
-    if(request.movieOption) {
-        request.movieOption.data = {...movieRequest};
-    } else {
-        request.movieOption = {
-            data: {...movieRequest}
-        }
-    }
+    request.data = {...movieRequest};
 
     return next();
 }
 
 
 export async function ensureNameIsOnlyMiddleware(request: Request, response: Response, next: NextFunction): Promise<Response | void> {
-    const movieRequest: iMovieRequest = request.movieOption.data!;
+    const movieRequest: iMovieRequest = request.data!;
     
     const queryString: string = `--sql
         SELECT
