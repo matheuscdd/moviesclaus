@@ -16,7 +16,6 @@ export async function listMovies(request: Request, response: Response): Promise<
     page = isNaN(page) || page <= 0 ? 0 : page - 1; 
     let nextPage: number | null = page + 2;
     let previousPage: number | null = page;
-    console.log(page, nextPage)
     if(page >= maxPage) {
         return errorNotFound(response);
     }
