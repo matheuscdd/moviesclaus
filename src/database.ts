@@ -2,7 +2,7 @@ import { Client } from "pg";
 
 export const client: Client = new Client({
     user: "Claus",
-    password: "0528",
+    password: "1234",
     host: "localhost",
     database: "movies_database",
     port: 5432
