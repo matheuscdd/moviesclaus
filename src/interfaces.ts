@@ -1,9 +1,9 @@
 import { QueryResult } from "pg";
 
 export interface iMovieRequest {
-    name: string;
-    duration: number;
-    price: number;
+    name?: string;
+    duration?: number;
+    price?: number;
     description?: string;
 }
 

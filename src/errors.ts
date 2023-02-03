@@ -7,13 +7,13 @@ export function errorNotFound(response: Response): Response {
     });
 }
 
-export function errorMessage(containsAllReqKeys: boolean, containsJustRightTypes: boolean, reqKeys: string[]): iCanRun {
+export function errorMessage(containsAllReqKeys: boolean = true, containsJustRightTypes: boolean, reqKeys: string[]): iCanRun {
     const canRun: iCanRun = {
         msg: "",
         error: false
     }
     if(!containsAllReqKeys) {
-        canRun.msg = `You need put at least required keys, they are: ${reqKeys} and, with want, description is optional. Don't try put more info than this`;
+        canRun.msg = `You need put at least required keys, they are: ${reqKeys} and, with want, description is optional. Don"t try put more info than this`;
     } else if(!containsJustRightTypes) {
         canRun.msg = `Some values are out of format. Read the documentation`;
     }

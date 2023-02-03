@@ -45,7 +45,7 @@ export async function verifyDataMiddleware(request: Request, response: Response,
     const movieRequest: iMovieRequest = request.body;
     const movieRequestKeys: string[] = Object.keys(movieRequest);
     const requiredKeysRaw: iMovieKeys[] = ["name",  "duration", "price"];
-    let requiredKeys: string[] = movieRequestKeys.length <= 3 ? [...requiredKeysRaw] : [...requiredKeysRaw, "description"];
+    const requiredKeys: string[] = movieRequestKeys.length <= 3 ? [...requiredKeysRaw] : [...requiredKeysRaw, "description"];
   
     const requestContainsAllRequiredKeys = movieRequestKeys.every((key) => requiredKeys.includes(key));
     const movieHasDescription: boolean = movieRequest.description !== undefined;
@@ -96,6 +96,35 @@ export async function ensureNameIsOnlyMiddleware(request: Request, response: Res
             message: `Movie already exists.`
         });
     }
+
+    return next();
+}
+
+export async function verifyOptionalDataMiddleware(request: Request, response: Response, next: NextFunction): Promise<Response | void> {
+    const movieRequest: iMovieRequest = request.body;
+    const movieRequestKeys: string [] = Object.keys(movieRequest);
+    const requiredKeysRaw: iMovieKeys[] = ["name", "description", "price", "duration"];
+    const requiredKeys: string[] = [...requiredKeysRaw];
+
+    const requestContainsAllRequiredKeys = movieRequestKeys.every((key) => requiredKeys.includes(key));
+
+    const testTypes = (): boolean => {
+        return (
+            movieRequest.name ? typeof movieRequest.name === "string" : true &&
+            movieRequest.duration ? typeof movieRequest.duration === "number" : true &&
+            movieRequest.price ? typeof movieRequest.price === "number" : true &&
+            movieRequest.description ? typeof movieRequest.description === "string" : true
+        );
+    }
+
+    const testsResult: iCanRun = errorMessage(requestContainsAllRequiredKeys, testTypes(), requiredKeys);
+    if(testsResult.error) {
+        return response.status(404).json({
+            message: testsResult.msg
+        });
+    }
+
+    request.data = {...movieRequest};
 
     return next();
 }

@@ -8,17 +8,24 @@ import { iMovie, iMovieListPage, iMovieRequest, iMovieResult, iOrder } from "./i
 import { amountMovies } from "./validate";
 
 export async function listMovies(request: Request, response: Response): Promise<Response> {
+    const quantityMovies: number = await amountMovies();
     let perPage: number = Number(request.query.perPage);
     perPage = isNaN(perPage) || perPage > 5 || perPage <= 0 ? 5 : perPage;
+    const maxPage: number = Math.ceil(quantityMovies / perPage);
     let page: number = Number(request.query.page);
-    let nextPage: number = page + 1;
-    let previousPage: number = page - 1;
     page = isNaN(page) || page <= 0 ? 0 : page - 1; 
+    let nextPage: number | null = page + 2;
+    let previousPage: number | null = page;
+    console.log(page, nextPage)
+    if(page >= maxPage) {
+        return errorNotFound(response);
+    }
     page *= perPage;
-    const quantityMovies: number = await amountMovies();
+    const minPage: number = 1;
 
-    const sort: iOrder | string = String(request.query.sort!) === 'price' || String(request.query.sort!) === 'duration' ? String(request.query.sort!) : 'id';
-    const order: iOrder | string = String(request.query.order!) === 'asc' || String(request.query.order!) === 'desc' || sort !== 'id' ? String(request.query.order!) : 'asc';
+    
+    const sort: iOrder | string = String(request.query.sort!) === "price" || String(request.query.sort!) === "duration" ? String(request.query.sort!) : "id";
+    const order: iOrder | string = sort != "id" && (String(request.query.order!) === "asc" || String(request.query.order!)) === "desc" ? String(request.query.order!) : "asc";
 
     const queryString: string = format(`--sql
         SELECT
@@ -35,15 +42,14 @@ export async function listMovies(request: Request, response: Response): Promise<
         values: [perPage, page]
     }; 
 
-    const maxPage: number = Math.ceil(quantityMovies / perPage);
-    const minPage: number = 1;
-    nextPage = nextPage > maxPage ? maxPage : nextPage;
-    previousPage = previousPage > minPage ? minPage : previousPage;
+   
+    nextPage = nextPage > maxPage ? null : nextPage;
+    previousPage = previousPage < minPage ? null : previousPage;
 
     const queryResult: iMovieResult = await client.query(queryConfig);
     const queryResponse: iMovieListPage = {
-        previousPage: `${url}${defaultRoute}?page=${previousPage}&perPage=${perPage}`, 
-        nextPage: `${url}${defaultRoute}?page=${nextPage}&perPage=${perPage}`,
+        previousPage: previousPage != null ? `${url}${defaultRoute}?page=${previousPage}&perPage=${perPage}` : null, 
+        nextPage: nextPage !== null ? `${url}${defaultRoute}?page=${nextPage}&perPage=${perPage}` : null,
         count: queryResult.rowCount,
         data: queryResult.rows
     }
