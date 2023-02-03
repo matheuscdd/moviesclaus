@@ -7,7 +7,7 @@ export function errorNotFound(response: Response): Response {
     });
 }
 
-export function errorMessage(containsAllReqKeys: boolean = true, containsJustRightTypes: boolean, reqKeys: string[]): iCanRun {
+export function errorMessage(containsAllReqKeys: boolean, containsJustRightTypes: boolean, reqKeys: string[]): iCanRun {
     const canRun: iCanRun = {
         msg: "",
         error: false

@@ -117,7 +117,7 @@ export async function verifyOptionalDataMiddleware(request: Request, response: R
         );
     }
 
-    const testsResult: iCanRun = errorMessage(requestContainsAllRequiredKeys, testTypes(), requiredKeys);
+    const testsResult: iCanRun = errorMessage(movieRequestKeys.length !== 0 && requestContainsAllRequiredKeys, testTypes(), requiredKeys);
     if(testsResult.error) {
         return response.status(404).json({
             message: testsResult.msg
