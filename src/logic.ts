@@ -16,16 +16,18 @@ export async function listMovies(request: Request, response: Response): Promise<
     page = isNaN(page) || page <= 0 ? 0 : page - 1; 
     let nextPage: number | null = page + 2;
     let previousPage: number | null = page;
-    if(page >= maxPage) {
-        return errorNotFound(response);
-    }
-    page *= perPage;
     const minPage: number = 1;
-
+    if(page >= maxPage) {
+        previousPage = maxPage
+    } else {
+        previousPage = previousPage < minPage ? null : previousPage;
+    }
+    page *= perPage; 
+    nextPage = nextPage > maxPage ? null : nextPage;
     
     const sort: iOrder | string = String(request.query.sort!) === "price" || String(request.query.sort!) === "duration" ? String(request.query.sort!) : "id";
     const order: iOrder | string = sort != "id" && (String(request.query.order!) === "asc" || String(request.query.order!)) === "desc" ? String(request.query.order!) : "asc";
-
+    
     const queryString: string = format(`--sql
         SELECT
             *
@@ -42,8 +44,7 @@ export async function listMovies(request: Request, response: Response): Promise<
     }; 
 
    
-    nextPage = nextPage > maxPage ? null : nextPage;
-    previousPage = previousPage < minPage ? null : previousPage;
+   
 
     const queryResult: iMovieResult = await client.query(queryConfig);
     const queryResponse: iMovieListPage = {

@@ -16,7 +16,7 @@ app.delete(routeWithId, getIdMiddleware, ensureIdExistsMiddleware, deleteMovie);
 app.put(routeWithId, getIdMiddleware, ensureIdExistsMiddleware, verifyDataMiddleware, ensureNameIsOnlyMiddleware, updateIntMovie);
 app.patch(routeWithId, getIdMiddleware, ensureIdExistsMiddleware, verifyOptionalDataMiddleware, ensureNameIsOnlyMiddleware, updateSomeInfoMovie);
 
-const PORT: number = 1234;
+const PORT: number = 3000;
 export const url: string = `http://localhost:${PORT}`;
 const runningMsg: string = `Server running on ${url}`;
 app.listen(PORT, async () => {
