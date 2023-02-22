@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import { QueryConfig } from "pg";
 import format from "pg-format";
-import { defaultRoute, url } from "./app";
+// import { defaultRoute, url } from "./app";
 import { client } from "./database";
 import { errorNotFound } from "./errors";
 import { iMovie, iMovieListPage, iMovieRequest, iMovieResult, iOrder } from "./interfaces";
 import { amountMovies } from "./validate";
+
+const defaultRoute = 3000;
+const url = "https://localhost/"
 
 export async function listMovies(request: Request, response: Response): Promise<Response> {
     const quantityMovies: number = await amountMovies();
