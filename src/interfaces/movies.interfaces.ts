@@ -1,15 +1,12 @@
+import { z } from "zod";
 import { QueryResult } from "pg";
+import { createMovieSchema, returnMovieWithId, updateMovieSchema } from "../schemas/movies.schemas";
+import { DeepPartial } from "typeorm";
 
-export interface iMovieRequest {
-    name?: string;
-    duration?: number;
-    price?: number;
-    description?: string;
-}
+export type iMovieRequestCreate = z.infer<typeof createMovieSchema>;
+export type iMovieRequestUpdate = DeepPartial<iMovie>;
 
-export interface iMovie extends iMovieRequest {
-    id: number;
-}
+export type iMovie = z.infer<typeof returnMovieWithId>;
 
 interface iCount {
     count: string;
@@ -25,8 +22,6 @@ export interface iMovieListPage {
     count: number;
     data: iMovie[];
 }
-
-export type iMovieKeys = "name" | "description" | "duration" | "price";
 
 export type iOrder = "price" | "duration";
 

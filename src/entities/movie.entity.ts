@@ -13,25 +13,27 @@ export class Movie {
     @PrimaryGeneratedColumn("increment") //Cria a coluna de primary key e dá pra escolher o tipo
     id: number //Para evitar o erro do constructor, precisa colocar no tsconfig strictPropertyInitialization como false
 
-    @Column({ length: 50 , unique: true }) //Length é o cumprimento do varchar,
+    @Column({ length: 50 , unique: true }) //Length é o cumprimento do varchar
     name: string
 
-    @Column({ nullable: true }) //Aqui é o contrário quando eu não quero not null, aí eu coloco que pode ser nulo
-    description: string //As especificações de cada campo serão passadas no parâmetro da função
+    @Column({ type: "text", nullable: true }) //Aqui é o contrário quando eu não quero not null, aí eu coloco que pode ser nulo
+    description?: string | undefined | null //As especificações de cada campo serão passadas no parâmetro da função
 
-    @Column()
+    @Column({ type: "int" })
     duration: number
 
-    @Column()
+    @Column({ type: "int" })
     price: number
 
-    @CreateDateColumn() //Preenche o campo de criação com a data automática
-    createAt: string
-
-    @UpdateDateColumn() //Preenche o campo de atualização com a data automática
-    updateAt: string
-
-    @DeleteDateColumn() //Preenche o campo de exclusão soft com a data automática
-    deleteAt: string
-
 }
+
+/*
+Para executar uma migração preciso utilizar o comando
+yarn typeorm migration:generate src/migrations/createMovie -d src/data-source.ts
+
+Passei para a migração, mas ainda não executei, para fazer isso preciso utilizar o comando
+yarn typeorm migration:run -d src/data-source.ts
+
+Para reverter uma migração preciso utilizar
+yarn typeorm migration:revert -d src/data-source.ts
+*/
