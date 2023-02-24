@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import app from '../../app';
 import { AppDataSource } from '../../data-source';
 import { Movie } from '../../entities';
-import { iMovieRepo } from '../../interfaces/movies.interfaces';
+import { iMovieRepo } from '../../interfaces';
 import { deleteRouteMock } from '../mocks';
 
 describe('DELETE /movies', () => {

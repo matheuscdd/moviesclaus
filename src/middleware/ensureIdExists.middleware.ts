@@ -13,12 +13,12 @@ export async function ensureIdExistsMiddleware(req: Request, res: Response, next
     
     const movieRepository: Repository<Movie> = AppDataSource.getRepository(Movie); //O método recebe a entidade e a partir dele vai carregar métodos de manipulação de dados
 
-    const findMovie = await movieRepository.findOne({
+    const findMovie = await movieRepository.exist({ //Verifica se existe e retorna um booleano
         where: {
             id: id
         }
     });
-
+ 
     if(!findMovie) throw new AppError(`Movie not found`, 404);
 
     return next();

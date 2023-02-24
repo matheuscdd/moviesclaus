@@ -6,7 +6,7 @@ export const ensureDataIsValidMiddleware = (schema: ZodTypeAny, arrKeys: string[
     if (!Object.keys(req.body).length) throw new AppError(`Body is empty`, 400);
     
     const validatedData = schema.parse(req.body);
-    console.log(typeof validatedData)
+    
     if (!Object.keys(validatedData).length) throw new AppError(`Some optional keys are missing: ${arrKeys}`, 400);
     req.body = validatedData;
 

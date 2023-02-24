@@ -17,7 +17,7 @@ export class Movie {
     name: string
 
     @Column({ type: "text", nullable: true }) //Aqui é o contrário quando eu não quero not null, aí eu coloco que pode ser nulo
-    description?: string | undefined | null //As especificações de cada campo serão passadas no parâmetro da função
+    description: string | null | undefined  //As especificações de cada campo serão passadas no parâmetro da função
 
     @Column({ type: "int" })
     duration: number

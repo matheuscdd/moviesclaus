@@ -6,7 +6,7 @@ import { Movie } from "../entities/movie.entity";
 import { Repository } from "typeorm";
 
 export async function ensureNameIsOnlyMiddleware(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    if (!req.body.name) next();
+    if (!req.body.name) return next();
     
     const movieRepository: Repository<Movie> = AppDataSource.getRepository(Movie);
 
@@ -15,9 +15,8 @@ export async function ensureNameIsOnlyMiddleware(req: Request, res: Response, ne
             name: req.body.name
         }
     });
-    // console.log(findMovie)
-    // console.log("😅")
-    if (findMovie) throw new AppError(`Movie already exists`, 409);
+
+    if (findMovie) throw new AppError(`Movie already exists.`, 409);
 
     return next();
 }

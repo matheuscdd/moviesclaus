@@ -1,15 +1,12 @@
-import { iCountResult } from "./interfaces/movies.interfaces";
+import { Repository } from "typeorm";
+import { AppDataSource } from "./data-source";
+import { Movie } from "./entities/movie.entity";
+
 
 export async function amountMovies(): Promise<number> {
-    // const queryString: string = `--sql
-    //     SELECT
-    //         COUNT(id)
-    //     FROM
-    //         movies;    
-    //     `;
-    
-    // const queryResult: iCountResult = await client.query(queryString);
-    // const amountMovies: number = Number(queryResult.rows[0].count);
+    const movieRepository: Repository<Movie> = AppDataSource.getRepository(Movie);
 
-    return 10;
+    const rowCount: number = await movieRepository.count();
+
+    return rowCount;
 }

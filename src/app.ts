@@ -3,10 +3,11 @@ import express, { Application } from "express";
 import { movieRoutes } from "./routes/movie.routes";
 import { handleError } from "./errors";
 
-export const app: Application = express();
+const app: Application = express();
 app.use(express.json());
 
 app.use("/movies", movieRoutes);
 
 app.use(handleError);
 
+export default app;
