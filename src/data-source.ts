@@ -14,25 +14,25 @@ function dataSourceConfig(): DataSourceOptions {
     
     const nodeEnv: string | undefined = process.env.NODE_ENV;
 
-    if (nodeEnv === "test") { //Uma forma ter uma configuração específica para testes, não conectando com a database real
+    if (nodeEnv === "test") { 
         return {
             type: "sqlite", 
-            database: ":memory:", //Vai utilizar apenas a memória do computador para testar
+            database: ":memory:", 
             synchronize: true,
             entities: [entitiesPath]
         }
     }
 
     return {
-        type: "postgres", //Tipo de intermediário sql
-        url: dbUrl, //localização da string
-        synchronize: false, //Pula as migrations, se deixar true pode perder os dados
-        logging: true, //Escreve no console as queries
-        entities: [entitiesPath], //Caminho de migrações
-        migrations: [migrationsPath] //Caminho de entidades
+        type: "postgres", 
+        url: dbUrl, 
+        synchronize: false, 
+        logging: true,
+        entities: [entitiesPath], 
+        migrations: [migrationsPath] 
     }
 }
 
-//Não posso esquecer de criar o script "typeorm": "typeorm-ts-node-commonjs" no node modules
 
-export const AppDataSource = new DataSource(dataSourceConfig()); //Seleciono a classe e passo as configurações como parâmetro
+
+export const AppDataSource = new DataSource(dataSourceConfig()); 

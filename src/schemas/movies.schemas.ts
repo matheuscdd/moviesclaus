@@ -5,7 +5,7 @@ const sortOption = Object.freeze(["price", "duration"]);
 
 export const createMovieSchema = z.object({
     name: z.string().max(50),
-    description: z.string().nullable().optional(), //pedir ajuda
+    description: z.string().nullable().optional(), 
     duration: z.number().int().positive(),
     price: z.number().int().positive()
 });

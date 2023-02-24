@@ -8,7 +8,7 @@ export type iMovieRequestUpdate = DeepPartial<iMovie>;
 export type iMovie = z.infer<typeof returnMovieWithId>;
 
 export interface iMovieListPage {
-    previousPage: string | null;
+    prevPage: string | null;
     nextPage: string | null;
     count: number;
     data: iMovie[];

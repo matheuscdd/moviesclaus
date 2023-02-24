@@ -5,19 +5,19 @@ import {
     CreateDateColumn, 
     UpdateDateColumn, 
     DeleteDateColumn 
-} from "typeorm"; //Todo o processo de criar a tabela e as colunas será realizado na api mesmo
+} from "typeorm"; 
 
-@Entity("movies") //Transforma a minha classe em uma entidade
+@Entity("movies") 
 export class Movie {
 
-    @PrimaryGeneratedColumn("increment") //Cria a coluna de primary key e dá pra escolher o tipo
-    id: number //Para evitar o erro do constructor, precisa colocar no tsconfig strictPropertyInitialization como false
+    @PrimaryGeneratedColumn("increment") 
+    id: number 
 
-    @Column({ length: 50 , unique: true }) //Length é o cumprimento do varchar
+    @Column({ length: 50 , unique: true })
     name: string
 
-    @Column({ type: "text", nullable: true }) //Aqui é o contrário quando eu não quero not null, aí eu coloco que pode ser nulo
-    description: string | null | undefined  //As especificações de cada campo serão passadas no parâmetro da função
+    @Column({ type: "text", nullable: true }) 
+    description: string | null | undefined  
 
     @Column({ type: "int" })
     duration: number
@@ -26,14 +26,3 @@ export class Movie {
     price: number
 
 }
-
-/*
-Para executar uma migração preciso utilizar o comando
-yarn typeorm migration:generate src/migrations/createMovie -d src/data-source.ts
-
-Passei para a migração, mas ainda não executei, para fazer isso preciso utilizar o comando
-yarn typeorm migration:run -d src/data-source.ts
-
-Para reverter uma migração preciso utilizar
-yarn typeorm migration:revert -d src/data-source.ts
-*/

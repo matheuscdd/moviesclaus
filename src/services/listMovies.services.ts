@@ -1,10 +1,10 @@
 import { FindOptionsOrderValue, Repository } from "typeorm";
 import { AppDataSource } from "../data-source";
 import { Movie } from "../entities/movie.entity";
-import { iMovie, iParams } from "../interfaces/movies.interfaces";
+import { iMovie, iMovieListPage, iParams } from "../interfaces/movies.interfaces";
 
 
-export async function listMovies({ page, perPage, order, sort }: iParams)/*: Promise<iMovieListPage>*/ {
+export async function listMovies({ page, perPage, order, sort }: iParams): Promise<iMovieListPage> {
     const movieRepository: Repository<Movie> = AppDataSource.getRepository(Movie);
     const quantityMovies: number = await movieRepository.count();
   
@@ -25,9 +25,6 @@ export async function listMovies({ page, perPage, order, sort }: iParams)/*: Pro
     if (sort === "id") {
         order = "asc"
     }
-
-
-    // const [movies, count] = await movieRepository.findAndCount();
 
 
 
