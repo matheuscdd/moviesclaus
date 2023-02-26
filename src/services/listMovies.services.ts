@@ -32,11 +32,11 @@ export async function listMovies({ page, perPage, order, sort }: iParams): Promi
         .count()
 
     const movies: Movie[] = await movieRepository
-        .createQueryBuilder('movie')
+        .createQueryBuilder("movie")
         .select()
         .take(perPage)
         .skip(page)
-        .orderBy('movie.' + sort, order === "asc" ? "ASC" : "DESC")
+        .orderBy("movie." + sort, order === "asc" ? "ASC" : "DESC")
         .getMany()
    
     const defaultRoute = "/movies";
