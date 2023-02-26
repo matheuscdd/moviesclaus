@@ -4,7 +4,7 @@ import path from "path"; //Preciso utilizar para não ter problemas ao executar 
 import { DataSource, DataSourceOptions } from "typeorm";
 
 function dataSourceConfig(): DataSourceOptions {
-    const entitiesPath: string = path.join(__dirname, "./entities/**{ts,js}");
+    const entitiesPath: string = path.join(__dirname, "./entities/**.{ts,js}");
     const migrationsPath: string = path.join(__dirname, "./migrations/**.{ts,js}");
     const dbUrl: string | undefined = process.env.DATABASE_URL;
 

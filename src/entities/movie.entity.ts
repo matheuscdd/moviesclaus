@@ -6,7 +6,7 @@ import {
     UpdateDateColumn, 
     DeleteDateColumn 
 } from "typeorm"; //Todo o processo de criar a tabela e as colunas será realizado na api mesmo
-
+//Entidades é uma classe que mapeia um banco de dados
 @Entity("movies") //Transforma a minha classe em uma entidade
 export class Movie {
 
