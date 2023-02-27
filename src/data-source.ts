@@ -16,7 +16,7 @@ function dataSourceConfig(): DataSourceOptions {
         return {
             type: "sqlite", 
             database: ":memory:", //Vai utilizar apenas a memória do computador para testar
-            synchronize: true,
+            synchronize: true, //Não vai versionar as migrações
             entities: [entitiesPath]
         }
     }
