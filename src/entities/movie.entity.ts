@@ -1,10 +1,7 @@
 import { 
     Entity, 
     Column, 
-    PrimaryGeneratedColumn, 
-    CreateDateColumn, 
-    UpdateDateColumn, 
-    DeleteDateColumn 
+    PrimaryGeneratedColumn
 } from "typeorm"; 
 
 @Entity("movies") 
